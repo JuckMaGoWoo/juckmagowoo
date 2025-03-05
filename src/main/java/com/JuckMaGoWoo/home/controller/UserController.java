@@ -1,4 +1,4 @@
-package com.JuckMaGoWoo.contoller;
+package com.JuckMaGoWoo.home.controller;
 
 import java.util.List;
 import java.util.Map;
