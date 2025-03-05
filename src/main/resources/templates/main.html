@@ -12,18 +12,21 @@
     <header th:insert="~{header :: header}"></header>
     <main>
         <div class="body-container">
-            <div class="character-container"><img src="/images/test.png" alt="메인 캐릭터"></div>
+            <div class="character-container">
+                <button class="record-button">
+                    <img src="/images/test.png" alt="메인 캐릭터">
+                </button>
+            </div>
         </div>
         <div class="bottom-container">
-            <div class="welcome-container" id="fadeText">안녕하세요</div>
+            <div class="switch-container">
+                <button class="end-button">
+                    <img src="/images/switch.png" alt="전원 버튼">
+                </button>
+            </div>
         </div>
     </main>
 </div>
 
-<script>
-    document.getElementById("fadeText").addEventListener("animationend", function() {
-        window.location.href = "/main"; // ✅ 이동할 페이지 설정
-    });
-</script>
 </body>
 </html>
