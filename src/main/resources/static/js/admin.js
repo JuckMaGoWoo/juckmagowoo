@@ -258,16 +258,9 @@ function updateGraph2() {
     // 메인 실행 함수
     async function main() {
         try {
-            // 데이터 로딩 중 표시
-            document.getElementById('loading').style.display = 'block';
-            document.getElementById('error').style.display = 'none';
-
             // DB에서 데이터 가져오기
             const response = await fetchDataFromDB();
-
-            // 로딩 완료
-            document.getElementById('loading').style.display = 'none';
-
+            
             // 응답 확인
             if (response.success && response.data) {
                 // 차트 초기화

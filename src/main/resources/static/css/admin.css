@@ -57,12 +57,27 @@ body {
 }
 
 /* 그래프 영역 */
-.chart-container {
+.statistic-container {
     background: white;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     height: 100%;
+}
+
+.chart-container {
+    height: 40%;
+    padding-bottom: 20px;
+}
+
+.table-container {
+    text-align: center;
+}
+
+.table-container td,
+.table-container th {
+    padding: 3px;
+    border: 1px solid #ddd;
 }
 
 /* 사용자 목록 */
