@@ -24,4 +24,5 @@ public class DangerzoneService {
     public List<Sentence> getAllSentencesByUserId(Long userId) {
         return sentenceRepository.findByUser_UserId(userId);
     }
+
 }

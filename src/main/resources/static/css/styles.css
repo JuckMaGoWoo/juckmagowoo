@@ -55,7 +55,7 @@ body {
 }
 
 .character-container {
-    margin: 40% 10%;
+    margin: 20% 10%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -102,3 +102,122 @@ video {
     top: 0;
     left: 0;
 }
+
+/* ✅ 기본 버튼 스타일 */
+.record-button {
+    position: relative;
+    width: 180px;
+    height: 80px;
+    border: none;
+    border-radius: 35px;
+    background: #1AAF5D;
+    color: white;
+    font-size: 1.5em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* ✅ 버튼 호버 효과 (녹음 전 - 초록색) */
+.record-button:hover {
+    background: #15904B; /* 더 어두운 초록색 */
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(26, 175, 93, 0.5);
+}
+
+/* ✅ 녹음 중 상태 (멈추기) */
+.record-button.active {
+    background: #D9534F; /* 빨간색 */
+}
+
+/* ✅ 버튼 호버 효과 (녹음 중 - 빨간색) */
+.record-button.active:hover {
+    background: #B52E26; /* 더 어두운 빨간색 */
+    transform: scale(1.05);
+    box-shadow: 0px 4px 10px rgba(217, 83, 79, 0.5);
+}
+
+/* ✅ 버튼 내부 텍스트 */
+.button-text {
+    position: relative;
+    z-index: 2;
+}
+
+/* ✅ 버튼 뒤의 작은 원 배경 */
+.button-background {
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    z-index: 1;
+    transition: all 0.3s ease-in-out;
+}
+
+/* ✅ 버튼이 눌렸을 때 애니메이션 */
+.record-button:active {
+    transform: scale(0.95);
+}
+
+.record-button.thinking {
+    background: #3498db;
+    animation: shake 0.5s infinite ease-in-out;
+    pointer-events: none;
+}
+
+/* ✅ 버튼이 흔들리는 애니메이션 */
+@keyframes shake {
+    0% { transform: translateX(0px); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0px); }
+}
+
+/* ✅ 버튼이 "생각중..." 상태일 때 호버 효과 */
+.record-button.thinking:hover {
+    background: #217dbb; /* 더 어두운 파란색 */
+    animation: shake 0.3s infinite ease-in-out;
+}
+
+
+
+/* 🟪 듣는 중 상태 (보라색, 버튼 비활성화) */
+.record-button.listening {
+    background: #8e44ad;
+    pointer-events: none;
+    animation: wave 2.5s infinite ease-in-out;
+}
+
+@keyframes wave {
+    0% {
+        transform: translateY(0px);
+        box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
+    }
+    50% {
+        transform: translateY(-7px);
+        box-shadow: 0 0 25px rgba(142, 68, 173, 0.7);
+    }
+    100% {
+        transform: translateY(0px);
+        box-shadow: 0 0 15px rgba(142, 68, 173, 0.5);
+    }
+}
+
+
+/* 버튼이 비활성화되었을 때 */
+.record-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 버튼 내부 텍스트 */
+.button-text {
+    position: relative;
+    z-index: 2;
+}
+
