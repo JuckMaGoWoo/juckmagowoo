@@ -1,4 +1,4 @@
-package com.JuckMaGoWoo.home.controller;
+package com.juckmagowoo.home.service;
 
 public class ChatGptRequest {
     private String question;

@@ -1,6 +1,6 @@
-package com.JuckMaGoWoo.home.controller;
+package com.juckmagowoo.home.controller;
 
-import com.JuckMaGoWoo.home.service.TtsService;
+import com.juckmagowoo.home.service.TtsService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

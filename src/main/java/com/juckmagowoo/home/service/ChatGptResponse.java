@@ -1,4 +1,4 @@
-package com.JuckMaGoWoo.home.service;
+package com.juckmagowoo.home.service;
 
 import java.util.List;
 

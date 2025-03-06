@@ -1,4 +1,4 @@
-package com.JuckMaGoWoo.home.entity;
+package com.juckmagowoo.home.entity;
 
 import java.time.LocalDateTime;
 

@@ -1,6 +1,6 @@
-package com.JuckMaGoWoo.home.controller;
+package com.juckmagowoo.home.controller;
 
-import com.JuckMaGoWoo.home.service.SttService;
+import com.juckmagowoo.home.service.SttService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

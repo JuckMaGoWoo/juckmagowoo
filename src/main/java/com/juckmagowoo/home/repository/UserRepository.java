@@ -1,6 +1,6 @@
-package com.JuckMaGoWoo.home.repository;
+package com.juckmagowoo.home.repository;
 
-import com.JuckMaGoWoo.home.entity.User;
+import com.juckmagowoo.home.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

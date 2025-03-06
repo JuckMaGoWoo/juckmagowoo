@@ -1,4 +1,4 @@
-package com.JuckMaGoWoo;
+package com.juckmagowoo.;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

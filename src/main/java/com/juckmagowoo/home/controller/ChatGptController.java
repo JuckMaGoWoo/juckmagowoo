@@ -1,7 +1,8 @@
-package com.JuckMaGoWoo.home.controller;
+package com.juckmagowoo.home.controller;
 
 
-import com.JuckMaGoWoo.home.service.ChatGptService;
+import com.juckmagowoo.home.service.ChatGptRequest;
+import com.juckmagowoo.home.service.ChatGptService;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

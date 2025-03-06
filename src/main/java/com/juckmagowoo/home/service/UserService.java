@@ -1,7 +1,7 @@
-package com.JuckMaGoWoo.home.service;
+package com.juckmagowoo.home.service;
 
-import com.JuckMaGoWoo.home.entity.User;
-import com.JuckMaGoWoo.home.repository.UserRepository;
+import com.juckmagowoo.home.entity.User;
+import com.juckmagowoo.home.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 @Service

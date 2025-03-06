@@ -1,7 +1,7 @@
-package com.JuckMaGoWoo.home.controller;
+package com.juckmagowoo.home.controller;
 
-import com.JuckMaGoWoo.home.entity.User;
-import com.JuckMaGoWoo.home.service.UserService;
+import com.juckmagowoo.home.entity.User;
+import com.juckmagowoo.home.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
