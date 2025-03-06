@@ -142,3 +142,8 @@ gradle-app.setting
 *.hprof
 
 # End of https://www.toptal.com/developers/gitignore/api/intellij,gradle
+
+# Spring Boot application properties
+src/main/resources/application.properties
+
+# End of https://www.toptal.com/developers/gitignore/api/intellij,gradle
