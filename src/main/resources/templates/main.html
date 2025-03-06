@@ -13,17 +13,19 @@
     <main>
         <div class="body-container">
             <div class="character-container">
-                <button class="record-button" id="recordBtn">
-                </button>
-                <video autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: cover;">
-                    <source src="/mov/speak.mov" type="video/mp4">
+
+                <video id="video1" autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: cover;">
+                    <source id="video1Source" src="/mov/listen.mov" type="video/mp4">
+                </video>
+                <video id="video2" autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: cover; opacity: 0; position: absolute; top: 0; left: 0;">
+                    <source id="video2Source" src="/mov/speak.mov" type="video/mp4">
                 </video>
 
             </div>
         </div>
         <div class="bottom-container">
             <div class="switch-container">
-                <button class="end-button">
+                <button class="record-button" id="recordBtn">
                     <img src="/images/switch.png" alt="전원 버튼">
                 </button>
             </div>

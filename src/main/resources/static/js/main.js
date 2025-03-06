@@ -4,6 +4,8 @@ let isRecording = false;
 
 document.addEventListener("DOMContentLoaded", () => {
     const button = document.getElementById("recordBtn");
+    const listenVideo = document.getElementById("video1");
+    const speakVideo = document.getElementById("video2");
 
     button.addEventListener("click", async () => {
         if (!isRecording) {
@@ -14,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.start();
                 isRecording = true;
-                button.style.filter = "brightness(50%)";
 
                 mediaRecorder.ondataavailable = event => {
                     audioChunks.push(event.data);
@@ -41,6 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
                             const audioBlob = await response.blob();
                             const audioUrl = URL.createObjectURL(audioBlob);
                             const audio = new Audio(audioUrl);
+                            audio.addEventListener("ended", () => {
+                                console.log("오디오 종료, 영상 변경");
+                                speakVideo.style.opacity = 0;  // 새 비디오 나타남
+                                listenVideo.style.opacity = 1;  // 기존 비디오 사라짐
+                            })
+                            //메인 캐릭터 영상 변경
+                            listenVideo.style.opacity = 0;
+                            speakVideo.style.opacity = 1;
                             //audio.controls = true; // 플레이어 추가
                             //document.body.appendChild(audio); // 브라우저에 추가
 
