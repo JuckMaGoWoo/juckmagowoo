@@ -2,11 +2,11 @@ let dangerTableHTML = `
         <table>
             <thead>
                 <tr>
-                    <th>순번</th>
-                    <th>사용자 입력</th>
-                    <th>시스템 입력</th>
-                    <th>우울 척도</th>
-                    <th>언어 능력</th>
+                    <th style="min-width: 50px">순번</th>
+                    <th style="min-width: 250px">사용자 입력</th>
+                    <th style="min-width: 250px">시스템 입력</th>
+                    <th style="min-width: 100px">우울 척도</th>
+                    <th style="min-width: 100px">언어 능력</th>
                 </tr>
             </thead>
             <tbody>
