@@ -31,6 +31,7 @@ public class ChatGptService {
                 .baseUrl("https://api.openai.com/v1")
                 .defaultHeader("Authorization", "Bearer " + apiKey)
                 .defaultHeader("Content-Type", "application/json")
+                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(10 * 1024 * 1024))
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.create()
                         .responseTimeout(Duration.ofMinutes(2))))
                 .build();
