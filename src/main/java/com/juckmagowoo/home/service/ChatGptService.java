@@ -58,52 +58,56 @@ public class ChatGptService {
 
                     User user = userRepository.findById(userId).orElseThrow();
 
-                    // 🔹 Sentence 객체 생성
+                    // 🔹 Sentence 객체 생성 (나중에 저장)
                     Sentence sentence = new Sentence();
                     sentence.setUserInput(question);
                     sentence.setCreatedAt(LocalDateTime.now());
-                    sentence.setUser(user);  // ✅ User 객체 저장
+                    sentence.setUser(user);  // User 객체 저장
 
-                    return getAnswer(question, prompt1)
-                            .flatMap(response1 -> {
-                                System.out.println("💬 GPT 응답 1 (원본): " + response1);
+                    // 1️⃣ 💬 리스폰 2 먼저 받아서 처리
+                    return getAnswer(question, prompt2)
+                            .flatMap(response2 -> {
+                                System.out.println("💬 GPT 응답 2 (MP3 변환): " + response2);
 
-                                response1 = cleanJsonResponse(response1);
-                                System.out.println("💬 GPT 응답 1 (정리 후): " + response1);
+                                // 🔹 TTS 변환 및 MP3 저장
+                                return ttsService.textToSpeech(response2)
+                                        .doOnNext(audioData -> {
+                                            try {
+                                                Files.write(Paths.get("./gpt_answer.mp3"), audioData,
+                                                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        })
+                                        .flatMap(audioData -> {
+                                            // 2️⃣ 🔊 MP3 반환 (브라우저에서 빨리 들을 수 있도록)
+                                            return Mono.just(audioData);
+                                        })
+                                        .doFinally(signal -> {
+                                            // 3️⃣ 💬 리스폰 1 (불안/논리 점수) 비동기 처리
+                                            getAnswer(question, prompt1)
+                                                    .flatMap(response1 -> {
+                                                        System.out.println(" GPT 응답 1 (원본): " + response1);
 
-                                Map<String, Integer> scores = parseScores(response1);
-                                if (scores == null) {
-                                    System.err.println("❌ GPT 응답 JSON 파싱 실패, 기본값으로 대체");
+                                                        response1 = cleanJsonResponse(response1);
+                                                        System.out.println(" GPT 응답 1 (정리 후): " + response1);
 
-                                    scores = new HashMap<>();
-                                    scores.put("anxiety_score", 50);
-                                    scores.put("logical_score", 50);
-                                    response1 = "{\"anxiety_score\": 50, \"logical_score\": 50, \"message\": \"Invalid response received\"}";
-                                }
-
-                                // 🔹 첫 번째 응답에서 점수만 추출
-                                sentence.setAnxietyScore(Long.valueOf(scores.get("anxiety_score")));
-                                sentence.setLogicalScore(Long.valueOf(scores.get("logical_score")));
-
-                                return getAnswer(question, prompt2)
-                                        .flatMap(response2 -> {
-                                            System.out.println("💬 GPT 응답 2: " + response2);
-
-                                            // 🔹 GPT Output을 두 번째 응답으로 저장
-                                            sentence.setGptOutput(response2);
-
-                                            // 🔹 DB 저장 (두 번째 응답 후 한 번만 저장)
-                                            sentenceRepository.save(sentence);
-
-                                            return ttsService.textToSpeech(response2)
-                                                    .doOnNext(audioData -> {
-                                                        try {
-                                                            Files.write(Paths.get("./gpt_answer.mp3"), audioData,
-                                                                    StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                                                        } catch (Exception e) {
-                                                            e.printStackTrace();
+                                                        Map<String, Integer> scores = parseScores(response1);
+                                                        if (scores == null) {
+                                                            System.err.println("❌ GPT 응답 JSON 파싱 실패, 기본값으로 대체");
+                                                            scores = Map.of("anxiety_score", 50, "logical_score", 50);
                                                         }
-                                                    });
+
+                                                        // 🔹 첫 번째 응답에서 점수만 추출
+                                                        sentence.setAnxietyScore(Long.valueOf(scores.get("anxiety_score")));
+                                                        sentence.setLogicalScore(Long.valueOf(scores.get("logical_score")));
+                                                        sentence.setGptOutput(response2);
+
+                                                        // 4️⃣ 🗄 최종 DB 저장 (비동기)
+                                                        return Mono.fromRunnable(() -> sentenceRepository.save(sentence));
+                                                    })
+                                                    .subscribeOn(Schedulers.boundedElastic())  // 비동기 실행
+                                                    .subscribe();
                                         });
                             });
                 })
