@@ -1,57 +1,33 @@
 package com.JuckMaGoWoo.home.controller;
 
-import java.util.List;
-import java.util.Map;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import com.JuckMaGoWoo.home.entity.User;
+import com.JuckMaGoWoo.home.service.UserService;
+import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/v1/user")
+import java.time.LocalDateTime;
+
 @RestController
+@RequestMapping("/api/v1/user")
 public class UserController {
 
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping
-    public ResponseEntity<String> createUser(@RequestParam String name, @RequestParam int age, @RequestParam boolean sex) {
-        // body 없이 200
-        return ResponseEntity.ok().build();
-    }
+    public User createUser(
+            @RequestParam String name,
+            @RequestParam Long age,
+            @RequestParam Boolean sex) {
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getUser(@PathVariable int id) {
-        // body 없이 200
-        Map<String, Object> user1 = Map.of(
-                "userId", 1,
-                "name", "홍길동",
-                "sex", "남",
-                "age", 20,
-                "createdAt", "2021-07-01T00:00:00"
-        );
+        User newUser = new User();
+        newUser.setName(name);
+        newUser.setAge(age);
+        newUser.setSex(sex);
+        newUser.setCreatedAt(LocalDateTime.now());
 
-        return ResponseEntity.ok(user1);
-    }
-
-    @GetMapping
-    public ResponseEntity<List<Map<String, Object>>> getUsers() {
-        // body 없이 200
-        Map<String, Object> user1 = Map.of(
-                "userId", 1,
-                "name", "홍길동",
-                "sex", "남",
-                "age", 20,
-                "createdAt", "2021-07-01T00:00:00"
-        );
-        Map<String, Object> user2 = Map.of(
-                "userId", 2,
-                "name", "홍박박",
-                "sex", "여",
-                "age", 20,
-                "createdAt", "2021-07-21T00:00:00"
-        );
-
-        return ResponseEntity.ok(List.of(user1, user2));
+        return userService.saveUser(newUser);
     }
 }
