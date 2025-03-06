@@ -83,14 +83,25 @@ input#gender{
     border: 1px solid #ddd;
 }
 
+.table-container td:nth-child(9),
+.table-container th:nth-child(9) {
+    background-color: lightpink;
+}
+
 .table-container td:nth-child(10),
 .table-container th:nth-child(10) {
-    background-color: lightpink;
+    background-color: lightcoral;
 }
 
 .table-container td:nth-child(11),
 .table-container th:nth-child(11) {
-    background-color: lightcoral;
+    background-color: tomato;
+}
+.emotion-img {
+    width: 36px;
+    height: 36px;
+    margin-left: 3px;
+    vertical-align: middle;
 }
 
 /* 사용자 목록 */

@@ -99,7 +99,7 @@ function initChart(data) {
         beforeDraw: (chart) => {
             const {ctx, chartArea, scales} = chart;
             const yScale = scales.y;
-            const threshold = 80; // 하이라이트할 임계값
+            const threshold = 70; // 하이라이트할 임계값
 
             if (!chartArea) {
                 return;
@@ -188,7 +188,7 @@ function initChart(data) {
     });
 
     updateTable(negativeScores, logicalScores);
-
+    updatePercentage (negativeScores, logicalScores)
 }
 
 // 점수 분포 테이블 업데이트 함수
@@ -240,6 +240,41 @@ function updateTable(negativeScores, logicalScores) {
 
     // 테이블 삽입
     document.getElementById('dataTable').innerHTML = tableHTML;
+}
+
+// 점수 퍼센트 함수
+function updatePercentage (negativeScores, logicalScores) {
+    // 70점이 넘는 점수 계산
+    const negativeCounts = negativeScores.filter(score => score >= 70).length;
+    const logicalCounts = logicalScores.filter(score => score >= 70).length;
+    const negativeAll = negativeScores.length;
+    const logicalAll = logicalScores.length;
+    let negativePercent = (negativeCounts/negativeAll)*100;
+    let logicalPercent = (logicalCounts/logicalAll)*100;
+
+    // 비율에 따라 적절한 이모지를 반환하는 함수
+    function getEmojiByPercentage(percent) {
+        if (percent < 25) {
+            return "../images/emoji-good.png"; // 웃는 얼굴 (25% 미만)
+        } else if (percent >= 25 && percent < 40) {
+            return "../images/emoji-normal.png"; // 무표정 (25%~40% 사이)
+        } else {
+            return "../images/emoji-bad.png"; // 우는 얼굴 (40% 이상)
+        }
+    }
+
+    // 비율에 따른 이모지를 HTML에 적용
+    let percentHTML = `
+    <div>
+        negative 비율 : ${negativePercent.toFixed(2)}% <img src="${getEmojiByPercentage(negativePercent)}" class="emotion-img" alt="감정이미지">
+    </div>
+    <div>
+        logical 비율 : ${logicalPercent.toFixed(2)}% <img src="${getEmojiByPercentage(logicalPercent)}" class="emotion-img" alt="감정이미지">
+    </div>
+`;
+
+    // 퍼센트 삽입
+    document.getElementById('dataPercent').innerHTML = percentHTML;
 }
 
 
