@@ -110,7 +110,7 @@ function addUserCard(user) {
 
         // ✅ graph.js에 메시지 전달 (선택사항)
         window.postMessage({ type: "USER_SELECTED", data: user }, "*");
-        // await loadDangerData(user.id);
+        loadDangerData(user.userId);
     });
 
     document.getElementById("userCards").appendChild(userCard);

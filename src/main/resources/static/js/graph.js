@@ -36,23 +36,19 @@ function updateGraph(user) {
 
 
 
-async function fetchDataFromDB() {
+async function fetchDataFromDB(userId) {
     try {
-        /*
-        const response = await fetch('/api/sentences');
+        const response = await fetch(`/api/v1/dangerzone/${userId}/all`);
         const data = await response.json();
-        return data;
-        */
-        return new Promise((resolve) => {
-            setTimeout(() => {
-                // 실제 환경에서는 서버 API로부터 이 데이터를 받아옵니다
-                resolve(simulateDBResponse());
-            }, 1000);
-        });
+        return {
+            success: true,
+            data: data
+        };
     } catch (error) {
         throw new Error('데이터를 불러오는 중 오류가 발생했습니다: ' + error.message);
     }
 }
+
 function userInfo(data) {
     document.getElementById("detailName").innerHTML = `이름: ${data['name']}`;
     document.getElementById("detailAge").innerHTML = `나이: ${data['age']}`;
@@ -83,12 +79,12 @@ function initChart(data) {
 
     // 차트 데이터 준비
     const labels = data.map(item => {
-        const date = new Date(item.created_at);
+        const date = new Date(item.createdAt);
         return date.getHours() + ':' + date.getMinutes().toString().padStart(2, '0');
     });
 
-    const negativeScores = data.map(item => item.negative_score);
-    const logicalScores = data.map(item => item.logical_score);
+    const negativeScores = data.map(item => item.anxietyScore);
+    const logicalScores = data.map(item => item.logicalScore);
 
     // Chart.js 커스텀 플러그인 정의
     const backgroundHighlightPlugin = {
@@ -276,10 +272,10 @@ function updatePercentage (negativeScores, logicalScores) {
 
 
 // 메인 실행 함수
-async function main() {
+async function main(userId) {
     try {
         // DB에서 데이터 가져오기
-        const response = await fetchDataFromDB();
+        const response = await fetchDataFromDB(userId);
 
         // 응답 확인
         if (response.success && response.data) {
@@ -294,7 +290,7 @@ async function main() {
 }
 
 // 페이지 로드 시 실행
-window.addEventListener('DOMContentLoaded', main);
+//window.addEventListener('DOMContentLoaded', main);
 
 // 윈도우 리사이즈 시 차트 크기 조정
 window.addEventListener('resize', function() {
@@ -303,4 +299,4 @@ window.addEventListener('resize', function() {
     }
 });
 
-setInterval(main, 5 * 60 * 1000);
+//setInterval(main, 5 * 60 * 1000);
