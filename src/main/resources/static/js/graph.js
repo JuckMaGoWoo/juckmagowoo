@@ -28,7 +28,7 @@ function loadSelectedUser() {
 }
 
 function updateGraph(user) {
-    console.log("그래프 업데이트: ", user);
+    // console.log("그래프 업데이트: ", user);
     main(user['userId']);
     // 여기에 그래프를 업데이트하는 코드 추가 (예: Chart.js 사용)
 }

@@ -1,15 +1,18 @@
-// 위험 데이터를 불러오는 함수
+const storedUser = localStorage.getItem("selectedUser");
+const user = JSON.parse(storedUser);
+const userId = user.userId;
+
 async function loadDangerData(userId) {
     try {
         // userId를 URL 경로로 전달
         const response = await fetch(`/api/v1/dangerzone/${userId}`);
-
+        console.log(response);
         if (!response.ok) {
             throw new Error(`서버 오류: ${response.status}`);
         }
 
         const dangerData = await response.json();
-
+        console.log(dangerData);
         // 테이블 업데이트
         updateDangerTable(dangerData);
     } catch (error) {
@@ -53,8 +56,3 @@ function updateDangerTable(dangerData) {
     document.getElementById('dangerTable').innerHTML = tableHTML;
 }
 
-// 페이지가 로드될 때 특정 userId로 데이터 로드
-document.addEventListener('DOMContentLoaded', () => {
-    const userId = 1;  // 예시로 userId를 1로 설정
-    loadDangerData(userId);
-});
