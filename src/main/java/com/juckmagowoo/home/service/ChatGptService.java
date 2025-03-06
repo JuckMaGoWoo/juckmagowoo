@@ -62,25 +62,17 @@ public class ChatGptService {
                     Sentence sentence = new Sentence();
                     sentence.setUserInput(question);
                     sentence.setCreatedAt(LocalDateTime.now());
-                    sentence.setUser(user);  // User 객체 저장
+                    sentence.setUser(user);  // ✅ User 객체 저장
 
                     // 1️⃣ 💬 리스폰 2 먼저 받아서 처리
                     return getAnswer(question, prompt2)
                             .flatMap(response2 -> {
                                 System.out.println("💬 GPT 응답 2 (MP3 변환): " + response2);
 
-                                // 🔹 TTS 변환 및 MP3 저장
+                                // 🔹 TTS 변환 (파일 저장 X, 메모리에서 처리)
                                 return ttsService.textToSpeech(response2)
-                                        .doOnNext(audioData -> {
-                                            try {
-                                                Files.write(Paths.get("./gpt_answer.mp3"), audioData,
-                                                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        })
                                         .flatMap(audioData -> {
-                                            // 2️⃣ 🔊 MP3 반환 (브라우저에서 빨리 들을 수 있도록)
+                                            // 2️⃣ 🔊 MP3 데이터를 직접 반환 (브라우저에서 재생)
                                             return Mono.just(audioData);
                                         })
                                         .doFinally(signal -> {
@@ -106,13 +98,14 @@ public class ChatGptService {
                                                         // 4️⃣ 🗄 최종 DB 저장 (비동기)
                                                         return Mono.fromRunnable(() -> sentenceRepository.save(sentence));
                                                     })
-                                                    .subscribeOn(Schedulers.boundedElastic())  // 비동기 실행
+                                                    .subscribeOn(Schedulers.boundedElastic())  // ✅ 비동기 실행
                                                     .subscribe();
                                         });
                             });
                 })
                 .subscribeOn(Schedulers.boundedElastic());
     }
+
 
 
     private Mono<String> getAnswer(String question, String prompt) {
