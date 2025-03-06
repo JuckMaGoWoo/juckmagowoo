@@ -8,10 +8,10 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @EntityScan(basePackages = {"com.juckmagowoo.home.entity"})
 @EnableJpaRepositories(basePackages = {"com.juckmagowoo.home.repository"})
-public class JuckmagowooApplication {
+public class JuckMaGoWooApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(JuckmagowooApplication.class, args);
+        SpringApplication.run(JuckMaGoWooApplication.class, args);
     }
 
 }
