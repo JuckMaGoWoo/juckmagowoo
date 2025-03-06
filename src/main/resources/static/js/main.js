@@ -73,6 +73,17 @@ document.addEventListener("DOMContentLoaded", () => {
                         const audioUrl = URL.createObjectURL(audioBlob);
                         const audio = new Audio(audioUrl);
 
+                        audio.addEventListener("ended", () => {
+                            console.log("🎬 오디오 종료, 영상 변경");
+                            speakVideo.style.opacity = 0;
+                            listenVideo.style.opacity = 1;
+
+                            // ✅ 버튼 원래 상태로 복구
+                            button.classList.remove("listening");
+                            buttonText.textContent = "말하기";
+                            isListening = false;
+                        });
+
                         // 🟪 "듣는 중" 상태 (보라색, 애니메이션 추가)
                         button.classList.remove("thinking");
                         button.classList.add("listening");
@@ -84,16 +95,8 @@ document.addEventListener("DOMContentLoaded", () => {
                             audio.play().catch(error => console.error("🔇 자동 재생 실패:", error));
                         };
 
-                        audio.addEventListener("ended", () => {
-                            console.log("🎬 오디오 종료, 영상 변경");
-                            speakVideo.style.opacity = 0;
-                            listenVideo.style.opacity = 1;
-
-                            // ✅ 버튼 원래 상태로 복구
-                            button.classList.remove("listening");
-                            buttonText.textContent = "말하기";
-                            isListening = false;
-                        });
+                        speakVideo.style.opacity = 1;
+                        listenVideo.style.opacity = 0;
 
                         console.log("🔊 오디오 자동 재생 시작!");
                     } else {
