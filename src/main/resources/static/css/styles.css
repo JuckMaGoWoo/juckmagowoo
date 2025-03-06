@@ -55,23 +55,21 @@ body {
 }
 
 .character-container {
-    margin: 50% 10%;
+    margin: 40% 10%;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 80%;
     height: 50%;
     object-fit: cover;
-}
-
-.character-container img{
-    filter: brightness(100%);
+    position: relative;
 }
 
 .bottom-container {
     display: flex;
     width: 100%;
     height: 100%;
+    margin-top: 80%;
     justify-content: center;
     align-items: flex-end;
 }
@@ -94,4 +92,13 @@ body {
     border: none; /* 테두리 제거 */
     padding: 0; /* 여백 제거 */
     cursor: pointer; /* 마우스 커서 변경 */
+}
+
+video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
