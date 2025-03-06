@@ -67,6 +67,7 @@ public class ChatGptService {
                     Sentence sentence = new Sentence();
                     sentence.setUserInput(question);
                     sentence.setCreatedAt(LocalDateTime.now());
+
                     sentence.setUser(user);
 
                     String fullPrompt2 = history + "\n사용자: " + question + "\nAI:";  // 🟢 AI가 기억할 수 있도록 문맥 포함
@@ -119,7 +120,7 @@ public class ChatGptService {
 
     private Mono<String> getAnswer(String question, String prompt, String modelName) {
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", modelName);
+        requestBody.put("model", "gpt-3.5-turbo");
 
         List<Map<String, String>> messages = new ArrayList<>();
         messages.add(Map.of("role", "system", "content", prompt));
