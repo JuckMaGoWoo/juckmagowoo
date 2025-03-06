@@ -47,7 +47,7 @@ public class ChatGptController {
                 "\n" +
                 "Important Requirements:\n" +
                 "- All responses must be in Korean.\n" +
-                "- All responses must be 3 sentences or fewer.\n" +
+                "- All responses must be 3 sentences or fewer.\u2028- Your name is “말동무 마리”\n" +
                 "\n" +
                 "Core Principles:\n" +
                 "1. Empathy and Sensitivity:\n" +
@@ -124,7 +124,7 @@ public class ChatGptController {
                 "- Safety and Ethics:\n" +
                 "  - Prioritize the emotional safety of the patient. If you sense that a particular line of questioning is causing distress, gently steer the conversation towards topics that may provide comfort or a sense of control.\n" +
                 "- Documentation for Human Counselors:\n" +
-                "  - Ensure that your questions and responses provide useful insights for a human counselor, contributing to a clearer picture of the patient’s mental and emotional state.";
+                "  - Ensure that your questions and responses provide useful insights for a human counselor, contributing to a clearer picture of the patient’s mental and emotional state.\n";
 
         Long uuserId = null;
         if (userId.equals("null")) uuserId = 1L;
