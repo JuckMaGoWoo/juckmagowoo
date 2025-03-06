@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     button.addEventListener("click", async () => {
         if (!isRecording) {
             try {
-                // 🎤 마이크 접근 요청
+
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
                 mediaRecorder = new MediaRecorder(stream);
@@ -38,14 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
                         });
 
                         if (response.ok) {
-                            // 🔥 JSON이 아닌 MP3 데이터가 반환되므로 response.blob() 사용
                             const audioBlob = await response.blob();
                             const audioUrl = URL.createObjectURL(audioBlob);
                             const audio = new Audio(audioUrl);
-                            audio.controls = true; // 플레이어 추가
-                            document.body.appendChild(audio); // 브라우저에 추가
+                            //audio.controls = true; // 플레이어 추가
+                            //document.body.appendChild(audio); // 브라우저에 추가
 
-                            // 🔊 자동 재생
                             audio.oncanplaythrough = () => {
                                 audio.play().catch(error => console.error("자동 재생 실패:", error));
                             };
