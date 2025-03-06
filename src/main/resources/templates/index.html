@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<div class="webview-container">
+<div class="webview-container" id="splashScreen">
     <!-- 헤더 포함 -->
     <header th:insert="~{header :: header}"></header>
     <main>
@@ -21,9 +21,16 @@
 </div>
 
 <script>
-    document.getElementById("fadeText").addEventListener("animationend", function() {
-        window.location.href = "/main"; // ✅ 이동할 페이지 설정
-    });
+    function goToNextPage() {
+        const userId = new URLSearchParams(window.location.search).get("userId");
+        window.location.href = `/main?userId=${userId}`; // ✅ 이동할 페이지 설정
+    }
+
+    // 애니메이션이 끝나면 자동 이동
+    document.getElementById("fadeText").addEventListener("animationend", goToNextPage);
+
+    // 클릭 시 즉시 이동
+    document.getElementById("splashScreen").addEventListener("click", goToNextPage);
 </script>
 </body>
 </html>
