@@ -104,12 +104,13 @@ function addUserCard(user) {
     `;
 
     // ✅ 클릭 시 사용자 정보 저장 및 그래프 업데이트 트리거
-    userCard.addEventListener("click", function () {
+    userCard.addEventListener("click", async function () {
         const userData = JSON.stringify(user);
         localStorage.setItem("selectedUser", userData);
 
         // ✅ graph.js에 메시지 전달 (선택사항)
         window.postMessage({ type: "USER_SELECTED", data: user }, "*");
+        await loadDangerData(user.id);
     });
 
     document.getElementById("userCards").appendChild(userCard);
