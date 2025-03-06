@@ -1,4 +1,39 @@
 let myChart = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+    // ✅ 페이지 로딩 시 기존 사용자 정보 불러오기
+    loadSelectedUser();
+
+    // ✅ storage 변경 감지 (다른 탭에서도 변경 가능)
+    window.addEventListener("storage", function (event) {
+        if (event.key === "selectedUser") {
+            loadSelectedUser();
+        }
+    });
+
+    // ✅ window.postMessage를 통한 데이터 수신 (선택사항)
+    window.addEventListener("message", function (event) {
+        if (event.data.type === "USER_SELECTED") {
+            updateGraph(event.data.data);
+        }
+    });
+});
+
+function loadSelectedUser() {
+    const storedUser = localStorage.getItem("selectedUser");
+    if (storedUser) {
+        const user = JSON.parse(storedUser);
+        updateGraph(user);
+    }
+}
+
+function updateGraph(user) {
+    console.log("그래프 업데이트: ", user);
+    // 여기에 그래프를 업데이트하는 코드 추가 (예: Chart.js 사용)
+}
+
+
+
 async function fetchDataFromDB() {
     try {
         /*
@@ -57,6 +92,37 @@ function initChart(data) {
 
     const negativeScores = data.map(item => item.negative_score);
     const logicalScores = data.map(item => item.logical_score);
+
+    // Chart.js 커스텀 플러그인 정의
+    const backgroundHighlightPlugin = {
+        id: 'backgroundHighlight',
+        beforeDraw: (chart) => {
+            const {ctx, chartArea, scales} = chart;
+            const yScale = scales.y;
+            const threshold = 70; // 하이라이트할 임계값
+
+            if (!chartArea) {
+                return;
+            }
+
+            // 임계값의 Y 위치 계산
+            const thresholdY = yScale.getPixelForValue(threshold);
+
+            // 임계값 위쪽 영역 채우기
+            ctx.save();
+            ctx.fillStyle = 'rgba(255, 200, 200, 0.4)'; // 하이라이트 색상
+            ctx.fillRect(
+                chartArea.left,
+                chartArea.top,
+                chartArea.width,
+                thresholdY - chartArea.top
+            );
+            ctx.restore();
+        }
+    };
+
+    // 기존 차트 코드에 플러그인 등록
+    Chart.register(backgroundHighlightPlugin);
 
     // 차트 생성
     myChart = new Chart(ctx, {
@@ -122,7 +188,7 @@ function initChart(data) {
     });
 
     updateTable(negativeScores, logicalScores);
-
+    updatePercentage (negativeScores, logicalScores)
 }
 
 // 점수 분포 테이블 업데이트 함수
@@ -152,7 +218,7 @@ function updateTable(negativeScores, logicalScores) {
 
     // 테이블 HTML 생성
     let tableHTML = `
-        <table class="distribution-table">
+        <table>
             <thead>
                 <tr>
                     <th>유형 / 범위</th>
@@ -174,6 +240,41 @@ function updateTable(negativeScores, logicalScores) {
 
     // 테이블 삽입
     document.getElementById('dataTable').innerHTML = tableHTML;
+}
+
+// 점수 퍼센트 함수
+function updatePercentage (negativeScores, logicalScores) {
+    // 70점이 넘는 점수 계산
+    const negativeCounts = negativeScores.filter(score => score >= 70).length;
+    const logicalCounts = logicalScores.filter(score => score >= 70).length;
+    const negativeAll = negativeScores.length;
+    const logicalAll = logicalScores.length;
+    let negativePercent = (negativeCounts/negativeAll)*100;
+    let logicalPercent = (logicalCounts/logicalAll)*100;
+
+    // 비율에 따라 적절한 이모지를 반환하는 함수
+    function getEmojiByPercentage(percent) {
+        if (percent < 25) {
+            return "../images/emoji-good.png"; // 웃는 얼굴 (25% 미만)
+        } else if (percent >= 25 && percent < 40) {
+            return "../images/emoji-normal.png"; // 무표정 (25%~40% 사이)
+        } else {
+            return "../images/emoji-bad.png"; // 우는 얼굴 (40% 이상)
+        }
+    }
+
+    // 비율에 따른 이모지를 HTML에 적용
+    let percentHTML = `
+    <div>
+        negative 비율 : ${negativePercent.toFixed(2)}% <img src="${getEmojiByPercentage(negativePercent)}" class="emotion-img" alt="감정이미지">
+    </div>
+    <div>
+        logical 비율 : ${logicalPercent.toFixed(2)}% <img src="${getEmojiByPercentage(logicalPercent)}" class="emotion-img" alt="감정이미지">
+    </div>
+`;
+
+    // 퍼센트 삽입
+    document.getElementById('dataPercent').innerHTML = percentHTML;
 }
 
 
