@@ -11,8 +11,12 @@
     <!-- 헤더 포함 -->
     <header th:insert="~{header :: header}"></header>
     <main>
-        <div class="body-container">
-            <div class="character-container"><img src="/images/test.png" alt="메인 캐릭터"></div>
+        <div class="character-container">
+
+            <video id="video2" autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: cover; position: absolute; top: 0; left: 0;">
+                <source id="video2Source" src="/mov/speak.mov" type="video/mp4">
+            </video>
+
         </div>
         <div class="bottom-container">
             <div class="welcome-container" id="fadeText">안녕하세요</div>
