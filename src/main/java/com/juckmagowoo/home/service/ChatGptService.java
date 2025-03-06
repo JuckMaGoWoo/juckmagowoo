@@ -26,12 +26,14 @@ public class ChatGptService {
     private final WebClient webClient;
     private final TtsService ttsService;
     private final SttService sttService;
+    private final UserService userService;
     private final ObjectMapper objectMapper;
     private final SentenceRepository sentenceRepository;
     private final UserRepository userRepository;
 
     public ChatGptService(@Value("${openai.api.key}") String apiKey,
                           TtsService ttsService,
+                          UserService userService,
                           SttService sttService,
                           ObjectMapper objectMapper,
                           SentenceRepository sentenceRepository,
@@ -49,6 +51,7 @@ public class ChatGptService {
         this.objectMapper = objectMapper;
         this.sentenceRepository = sentenceRepository;
         this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     public Mono<byte[]> processAudioWithTwoPrompts(MultipartFile audioFile, String prompt1, String prompt2, long userId) {
@@ -58,33 +61,26 @@ public class ChatGptService {
 
                     User user = userRepository.findById(userId).orElseThrow();
 
-                    // 🔹 Sentence 객체 생성 (나중에 저장)
+                    String history = (user.getHistory() == null) ? "" : user.getHistory();
+                    System.out.println("📝 사용자 히스토리: \n" + history);
+
                     Sentence sentence = new Sentence();
                     sentence.setUserInput(question);
                     sentence.setCreatedAt(LocalDateTime.now());
-                    sentence.setUser(user);  // User 객체 저장
+                    sentence.setUser(user);
 
-                    // 1️⃣ 💬 리스폰 2 먼저 받아서 처리
-                    return getAnswer(question, prompt2)
+                    String fullPrompt2 = history + "\n사용자: " + question + "\nAI:";  // 🟢 AI가 기억할 수 있도록 문맥 포함
+
+                    return getAnswer(fullPrompt2, prompt2)
                             .flatMap(response2 -> {
                                 System.out.println("💬 GPT 응답 2 (MP3 변환): " + response2);
 
-                                // 🔹 TTS 변환 및 MP3 저장
+                                // 🔹 TTS 변환 및 MP3 생성
                                 return ttsService.textToSpeech(response2)
-                                        .doOnNext(audioData -> {
-                                            try {
-                                                Files.write(Paths.get("./gpt_answer.mp3"), audioData,
-                                                        StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-                                            } catch (Exception e) {
-                                                e.printStackTrace();
-                                            }
-                                        })
                                         .flatMap(audioData -> {
-                                            // 2️⃣ 🔊 MP3 반환 (브라우저에서 빨리 들을 수 있도록)
                                             return Mono.just(audioData);
                                         })
                                         .doFinally(signal -> {
-                                            // 3️⃣ 💬 리스폰 1 (불안/논리 점수) 비동기 처리
                                             getAnswer(question, prompt1)
                                                     .flatMap(response1 -> {
                                                         System.out.println(" GPT 응답 1 (원본): " + response1);
@@ -97,22 +93,28 @@ public class ChatGptService {
                                                             System.err.println("❌ GPT 응답 JSON 파싱 실패, 기본값으로 대체");
                                                             scores = Map.of("anxiety_score", 50, "logical_score", 50);
                                                         }
-
-                                                        // 🔹 첫 번째 응답에서 점수만 추출
                                                         sentence.setAnxietyScore(Long.valueOf(scores.get("anxiety_score")));
                                                         sentence.setLogicalScore(Long.valueOf(scores.get("logical_score")));
                                                         sentence.setGptOutput(response2);
 
-                                                        // 4️⃣ 🗄 최종 DB 저장 (비동기)
-                                                        return Mono.fromRunnable(() -> sentenceRepository.save(sentence));
+                                                        sentenceRepository.save(sentence);
+
+                                                        // 5️⃣ 📝 사용자 히스토리 업데이트
+                                                        String updatedHistory = history + "\n사용자: " + question + "\nAI: " + response2;
+                                                        user.setHistory(updatedHistory);
+                                                        userRepository.save(user);
+
+                                                        return Mono.empty();
                                                     })
-                                                    .subscribeOn(Schedulers.boundedElastic())  // 비동기 실행
+                                                    .subscribeOn(Schedulers.boundedElastic())
                                                     .subscribe();
                                         });
                             });
                 })
                 .subscribeOn(Schedulers.boundedElastic());
     }
+
+
 
 
     private Mono<String> getAnswer(String question, String prompt) {

@@ -37,6 +37,9 @@ public class User {
     @Column(name = "age", nullable = false)
     private Long age;
 
+    @Column(name = "history", columnDefinition = "TEXT", nullable = false)
+    private String history;
+
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 

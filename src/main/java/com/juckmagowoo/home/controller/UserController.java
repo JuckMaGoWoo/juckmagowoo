@@ -5,6 +5,7 @@ import com.juckmagowoo.home.service.UserService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -50,4 +51,16 @@ public class UserController {
         return userService.getUserById(id);
     }
 
+    @GetMapping("/{id}/history")
+    public ResponseEntity<String> getUserHistory(@PathVariable Long id) {
+        User user = userService.getUserById(id);
+        String history = user.getHistory();
+
+        if (history == null || history.isEmpty()) {
+            return ResponseEntity.ok("대화 기록이 없습니다.");
+        }
+
+        return ResponseEntity.ok(history);
+    }
 }
+
