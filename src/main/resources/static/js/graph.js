@@ -59,7 +59,7 @@ function userInfo(data) {
     const qrCode = new QRCodeStyling({
         width: 90,
         height: 90,
-        data: `{domain}/?userId=${data['userId']}`,
+        data: `https://swan-lake.site/?userId=${data['userId']}`,
         dotsOptions: {
             color: "#000",
             type: "square"
