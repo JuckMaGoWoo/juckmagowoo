@@ -67,6 +67,7 @@ public class ChatGptService {
                     Sentence sentence = new Sentence();
                     sentence.setUserInput(question);
                     sentence.setCreatedAt(LocalDateTime.now());
+
                     sentence.setUser(user);
 
                     String fullPrompt2 = history + "\n사용자: " + question + "\nAI:";  // 🟢 AI가 기억할 수 있도록 문맥 포함
@@ -78,6 +79,7 @@ public class ChatGptService {
                                 // 🔹 TTS 변환 및 MP3 생성
                                 return ttsService.textToSpeech(response2)
                                         .flatMap(audioData -> {
+
                                             return Mono.just(audioData);
                                         })
                                         .doFinally(signal -> {
@@ -106,14 +108,15 @@ public class ChatGptService {
 
                                                         return Mono.empty();
                                                     })
+
                                                     .subscribeOn(Schedulers.boundedElastic())
+
                                                     .subscribe();
                                         });
                             });
                 })
                 .subscribeOn(Schedulers.boundedElastic());
     }
-
 
 
 
