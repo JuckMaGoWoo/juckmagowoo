@@ -13,6 +13,4 @@ public interface SentenceRepository extends JpaRepository<Sentence, Long> {
 
     List<Sentence> findByUser_UserIdAndAnxietyScoreGreaterThanEqualAndLogicalScoreLessThanEqual(Long userId, Long anxietyScore, Long logicalScore);
 
-    // 특정 사용자의 모든 데이터 조회
-    List<Sentence> findByUser_UserId(Long userId);
 }

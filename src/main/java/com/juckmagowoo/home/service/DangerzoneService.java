@@ -20,10 +20,5 @@ public class DangerzoneService {
         return sentenceRepository.findByUser_UserIdAndAnxietyScoreGreaterThanEqualAndLogicalScoreLessThanEqual(userId, 70L, 30L);
     }
 
-    // 특정 사용자의 모든 데이터 조회
-    public List<Sentence> getAllSentencesByUserId(Long userId) {
-        return sentenceRepository.findByUser_UserId(userId);
-    }
-
 
 }
