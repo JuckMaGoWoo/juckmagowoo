@@ -12,6 +12,8 @@
   <!-- 왼쪽 사용자 입력 -->
   <div class="user-input">
     <h2>사용자 정보 입력</h2>
+    <br>
+
     <label for="name">이름:</label>
     <input type="text" id="name" placeholder="이름 입력">
 
@@ -35,14 +37,22 @@
 
   <!-- 오른쪽 데이터 시각화 -->
   <div class="data-section">
-    <div class="chart-container">
-      <h2>데이터 그래프</h2>
-      <canvas id="dataGraph"></canvas>
+    <div class="statistic-container">
+      <div class="chart-container">
+        <h2>데이터 그래프</h2>
+        <canvas id="dataGraph"></canvas>
+      </div>
+      <div>
+        <h2>데이터 테이블</h2>
+        <div class="table-container" id="dataTable"></div>
+      </div>
     </div>
+
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="/js/admin.js"></script>
+<script src="/js/graph.js"></script>
 </body>
 </html>
