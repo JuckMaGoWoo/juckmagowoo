@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/api/audio")  // API 경로 통일
+@RequestMapping("/api/audio")
 public class ChatGptController {
 
     private final ChatGptService chatGptService;
@@ -24,7 +24,7 @@ public class ChatGptController {
     @PostMapping(value = "/stt", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
     public Mono<ResponseEntity<byte[]>> processAudioToTts(
             @RequestParam("file") MultipartFile audioFile,
-            @RequestParam("userId") String userId) {
+            @RequestParam(value = "userId", defaultValue = "1") String userId) {
 
         String prompt1 = "You are provided with a conversation that consists of two parts: an \"LLM question\" and a \"human answer.\" Your task is to analyze the content of the human answer exclusively, and then generate a JSON object that reflects your evaluation based on two specific criteria:\n" +
                 "\n" +
@@ -41,7 +41,6 @@ public class ChatGptController {
                 "- The JSON object must not include any additional keys, text, commentary, or formatting.\n" +
                 "- The values must be numbers only, and each must be within the range of 0 to 100.\n" +
                 "- Your entire output must be enclosed in a code block for easy copying.\n" +
-                "- Do not include any extra text or markdown formatting outside of the JSON code block.\n" +
                 "- The output must be valid JSON and nothing else.";
         String prompt2 = "Objective:\n" +
                 "Your primary goal is to help an elderly individual open up about their emotional state by asking thoughtful, empathetic, and culturally sensitive questions. You are acting as a counselor, and your questions must mirror those a human counselor would ask to understand the patient’s emotional, social, and physical well-being.\n" +
@@ -127,7 +126,11 @@ public class ChatGptController {
                 "- Documentation for Human Counselors:\n" +
                 "  - Ensure that your questions and responses provide useful insights for a human counselor, contributing to a clearer picture of the patient’s mental and emotional state.";
 
-        return chatGptService.processAudioWithTwoPrompts(audioFile, prompt1, prompt2)
+        Long uuserId = null;
+        if (userId.equals("null")) uuserId = 1L;
+        else uuserId = Long.parseLong(userId);
+
+        return chatGptService.processAudioWithTwoPrompts(audioFile, prompt1, prompt2, uuserId)
                 .map(audioData -> ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_OCTET_STREAM)
                         .body(audioData));
