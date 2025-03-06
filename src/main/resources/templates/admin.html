@@ -1,69 +1,77 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Page</title>
-  <link rel="stylesheet" href="/css/admin.css">
-  <link rel="stylesheet" href="/css/dangerTable.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Page</title>
+    <link rel="stylesheet" href="/css/admin.css">
+    <link rel="stylesheet" href="/css/dangerTable.css">
 </head>
 <body>
 
 <div class="admin-container">
-  <!-- 왼쪽 사용자 입력 -->
-  <div class="user-input">
-    <h2>사용자 정보 입력</h2>
-    <br>
+    <!-- 왼쪽 사용자 입력 -->
+    <div class="user-input">
+        <h2>사용자 정보 입력</h2>
+        <br>
 
-    <label for="name">이름:</label>
-    <input type="text" id="name" placeholder="이름 입력">
+        <label for="name">이름:</label>
+        <input type="text" id="name" placeholder="이름 입력">
 
-    <label for="age">나이:</label>
-    <input type="number" id="age" placeholder="나이 입력">
+        <label for="age">나이:</label>
+        <input type="number" id="age" placeholder="나이 입력">
 
-    <label for="gender">성별:</label>
-    <select id="gender">
-      <option value="male">남성</option>
-      <option value="female">여성</option>
-    </select>
+        <label for="gender">성별:</label>
+        <select id="gender">
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+        </select>
 
-    <button id="addUser">추가</button>
-    <h2>사용자 목록</h2>
-    <div id="userCards"></div> <!-- 사용자 목록이 표시될 영역 -->
-    <div id="pagination">
-      <button id="prevPage">이전</button>
-      <button id="nextPage">다음</button>
-    </div>
-  </div>
-
-  <!-- 오른쪽 데이터 시각화 -->
-  <div class="data-section">
-    <div class="statistic-container">
-      <div class="chart-container">
-        <h2>데이터 그래프</h2>
-        <canvas id="dataGraph"></canvas>
-      </div>
-      <div>
-        <h2>데이터 테이블</h2>
-        <div style="display: flex; flex-direction: row;">
-          <div class="table-container" id="dataTable"></div>
-          <div style="margin-left: 10px; text-align: left; display: grid; font-weight: bold; align-items: center; font-size: larger;" id="dataPercent"></div>
+        <button id="addUser">추가</button>
+        <h2>사용자 목록</h2>
+        <div id="userCards"></div> <!-- 사용자 목록이 표시될 영역 -->
+        <div id="pagination">
+            <button id="prevPage">이전</button>
+            <button id="nextPage">다음</button>
         </div>
-      </div>
-      <div>
-        <h2>위험 요소</h2>
-        <div class="danger-table-container">
-          <table class="danger-table" id="dangerTable"></table>
-        </div>
-      </div>
     </div>
 
-  </div>
+    <!-- 오른쪽 데이터 시각화 -->
+    <div class="data-section">
+        <div class="statistic-container">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <div style="display: flex; justify-content: left; align-items: center;">
+                    <div class="top-info" id="detailName"></div>
+                    <div class="top-info" id="detailAge"></div>
+                    <div class="top-info" id="detailSex"></div>
+                </div>
+                <div id="qrcode"></div>
+            </div>
+            <div class="chart-container">
+                <h2>데이터 그래프</h2>
+                <canvas id="dataGraph"></canvas>
+                <div>
+                    <h2>데이터 테이블</h2>
+                    <div style="display: flex; flex-direction: row;">
+                        <div class="table-container" id="dataTable"></div>
+                        <div style="margin-left: 10px; text-align: left; display: grid; font-weight: bold; align-items: center; font-size: larger;" id="dataPercent"></div>
+                    </div>
+                </div>
+                <div>
+                    <h2>위험 요소</h2>
+                    <div class="danger-table-container">
+                        <table class="danger-table" id="dangerTable"></table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="/js/admin.js"></script>
-<script src="/js/graph.js"></script>
-<script src="/js/danger.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling/lib/qr-code-styling.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/js/admin.js"></script>
+    <script src="/js/graph.js"></script>
+    <script src="/js/danger.js"></script>
 </body>
 </html>

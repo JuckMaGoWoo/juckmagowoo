@@ -29,6 +29,8 @@ function loadSelectedUser() {
 
 function updateGraph(user) {
     console.log("그래프 업데이트: ", user);
+    userInfo(user);
+    main(user['userId']);
     // 여기에 그래프를 업데이트하는 코드 추가 (예: Chart.js 사용)
 }
 
@@ -51,29 +53,24 @@ async function fetchDataFromDB() {
         throw new Error('데이터를 불러오는 중 오류가 발생했습니다: ' + error.message);
     }
 }
-
-//더미데이터 생성 함수
-function simulateDBResponse() {
-    const baseDate = new Date('2025-03-05T10:00:00');
-    const result = [];
-
-    for (let i = 1; i <= 30; i++) {
-        const date = new Date(baseDate);
-        date.setMinutes(date.getMinutes() + (i - 1));
-
-        result.push({
-            sentense_id: i,
-            user_id: 1,
-            negative_score: Math.floor(Math.random() * 100),
-            logical_score: Math.floor(Math.random() * 100),
-            created_at: date.toISOString()
-        });
-    }
-
-    return {
-        success: true,
-        data: result
-    };
+function userInfo(data) {
+    document.getElementById("detailName").innerHTML = `이름: ${data['name']}`;
+    document.getElementById("detailAge").innerHTML = `나이: ${data['age']}`;
+    document.getElementById("detailSex").innerHTML = `성별: ${data['sex'] ? '남자' : '여자'}`;
+    const qrCode = new QRCodeStyling({
+        width: 90,
+        height: 90,
+        data: `{domain}/?userId=${data['userId']}`,
+        dotsOptions: {
+            color: "#000",
+            type: "square"
+        },
+        backgroundOptions: {
+            color: "#fff"
+        }
+    });
+    document.getElementById("qrcode").innerHTML = '';
+    qrCode.append(document.getElementById("qrcode"));
 }
 
 function initChart(data) {
