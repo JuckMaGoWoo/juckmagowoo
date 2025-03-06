@@ -11,39 +11,46 @@ document.addEventListener("DOMContentLoaded", () => {
                 // 🎤 마이크 접근 요청
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
-                // 🟢 MediaRecorder 생성 및 녹음 시작
                 mediaRecorder = new MediaRecorder(stream);
                 mediaRecorder.start();
                 isRecording = true;
-                button.style.filter = "brightness(50%)"; // ✅ 버튼 밝기 50%로 낮춤
+                button.style.filter = "brightness(50%)";
 
-                // 🔴 녹음 데이터 저장
                 mediaRecorder.ondataavailable = event => {
                     audioChunks.push(event.data);
                 };
 
                 mediaRecorder.onstop = async () => {
-                    // 🎵 Blob을 사용하여 오디오 데이터 생성
                     const audioBlob = new Blob(audioChunks, { type: "audio/wav" });
                     audioChunks = [];
 
-                    // 📤 FormData에 오디오 파일 추가
                     const formData = new FormData();
                     formData.append("file", audioBlob, "recording.wav");
 
                     try {
                         const queryString = window.location.search;
                         const urlParams = new URLSearchParams(queryString);
-                        const userId =urlParams.get("userId");
-                        // 🚀 백엔드 API로 전송
+                        const userId = urlParams.get("userId");
+
                         const response = await fetch(`/api/audio/stt?userId=${userId}`, {
                             method: "POST",
                             body: formData,
                         });
 
                         if (response.ok) {
-                            console.log(await response.text());
-                            console.log("오디오 업로드 성공!");
+                            // 🔥 JSON이 아닌 MP3 데이터가 반환되므로 response.blob() 사용
+                            const audioBlob = await response.blob();
+                            const audioUrl = URL.createObjectURL(audioBlob);
+                            const audio = new Audio(audioUrl);
+                            audio.controls = true; // 플레이어 추가
+                            document.body.appendChild(audio); // 브라우저에 추가
+
+                            // 🔊 자동 재생
+                            audio.oncanplaythrough = () => {
+                                audio.play().catch(error => console.error("자동 재생 실패:", error));
+                            };
+
+                            console.log("오디오 자동 재생 시작!");
                         } else {
                             console.error("오디오 업로드 실패:", response.statusText);
                         }
@@ -58,10 +65,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
         } else {
-            // 🔴 녹음 중지 및 저장
             mediaRecorder.stop();
             isRecording = false;
-            button.style.filter = "brightness(100%)"; // ✅ 버튼 밝기 원래대로 복원
+            button.style.filter = "brightness(100%)";
         }
     });
 });
+

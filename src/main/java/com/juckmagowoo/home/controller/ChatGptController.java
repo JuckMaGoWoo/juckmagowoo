@@ -1,16 +1,15 @@
 package com.juckmagowoo.home.controller;
 
-
-import com.juckmagowoo.home.service.ChatGptRequest;
 import com.juckmagowoo.home.service.ChatGptService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import reactor.core.publisher.Mono;
 
 @RestController
+@RequestMapping("/api/audio")  // API 경로 통일
 public class ChatGptController {
 
     private final ChatGptService chatGptService;
@@ -20,21 +19,36 @@ public class ChatGptController {
     }
 
     /**
-     * POST /chatgpt 엔드포인트: 요청 바디에 질문과 프롬프트를 포함하여 GPT의 답변을 파일에 저장한 후, 텍스트로 반환합니다.
-     * 요청 예시 (JSON):
-     * {
-     *    "question": "오늘 날씨 어때?",
-     *    "prompt": "대답은 용 으로 끝나게해"
-     * }
+     * 🎤 STT → ChatGPT → TTS (MP3 변환 후 반환)
      */
-    @PostMapping(value="/chatgpt", produces = MediaType.TEXT_PLAIN_VALUE)
-    public Mono<ResponseEntity<String>> getChatGptAnswer(@RequestBody ChatGptRequest request) {
-        String question = request.getQuestion();
-        String prompt = request.getPrompt();
-        return chatGptService.getAndSaveAnswer(question, prompt)
-                .map(answer -> ResponseEntity.ok().body(answer));
+    @PostMapping(value = "/stt", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public Mono<ResponseEntity<byte[]>> processAudioToTts(
+            @RequestParam("file") MultipartFile audioFile,
+            @RequestParam("userId") String userId) {
+
+        String prompt1 = "너는 친절한 AI야. 사용자의 질문을 이해하고 적절한 답변을 제공해.";
+        String prompt2 = "너는 감성적인 AI야. 사용자의 감정을 이해하고 공감하는 답변을 제공해.";
+
+        return chatGptService.processAudioWithTwoPrompts(audioFile, prompt1, prompt2)
+                .map(audioData -> ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                        .body(audioData));
+    }
+
+    /**
+     * 🔥 저장된 MP3 파일을 반환하는 API
+     */
+    @GetMapping(value = "/mp3", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public Mono<ResponseEntity<byte[]>> getGeneratedAudio() {
+        return chatGptService.getGeneratedAudio()
+                .map(audioData -> ResponseEntity.ok()
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=gpt_answer.mp3")
+                        .contentType(MediaType.parseMediaType("audio/mpeg"))
+                        .body(audioData));
     }
 }
+
+
 
 
 
