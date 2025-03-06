@@ -29,6 +29,9 @@ function loadSelectedUser() {
 
 function updateGraph(user) {
     console.log("그래프 업데이트: ", user);
+  
+    userInfo(user);
+  
     main(user['userId']);
     // 여기에 그래프를 업데이트하는 코드 추가 (예: Chart.js 사용)
 }
@@ -47,6 +50,28 @@ async function fetchDataFromDB(userId) {
         throw new Error('데이터를 불러오는 중 오류가 발생했습니다: ' + error.message);
     }
 }
+
+
+function userInfo(data) {
+    document.getElementById("detailName").innerHTML = `이름: ${data['name']}`;
+    document.getElementById("detailAge").innerHTML = `나이: ${data['age']}`;
+    document.getElementById("detailSex").innerHTML = `성별: ${data['sex'] ? '남자' : '여자'}`;
+    const qrCode = new QRCodeStyling({
+        width: 90,
+        height: 90,
+        data: `{domain}/?userId=${data['userId']}`,
+        dotsOptions: {
+            color: "#000",
+            type: "square"
+        },
+        backgroundOptions: {
+            color: "#fff"
+        }
+    });
+    document.getElementById("qrcode").innerHTML = '';
+    qrCode.append(document.getElementById("qrcode"));
+}
+
 
 function initChart(data) {
     const ctx = document.getElementById('dataGraph').getContext('2d');

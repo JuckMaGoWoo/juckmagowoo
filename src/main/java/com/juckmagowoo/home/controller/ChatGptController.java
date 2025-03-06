@@ -26,7 +26,7 @@ public class ChatGptController {
             @RequestParam("file") MultipartFile audioFile,
             @RequestParam(value = "userId", defaultValue = "1") String userId) {
 
-        String prompt1 = "You are provided with a conversation that consists of two parts: an \"LLM question\" and a \"human answer.\" Your task is to analyze the content of the human answer exclusively, and then generate a JSON object that reflects your evaluation based on two specific criteria:\n" +
+        String scoreAgentInstruction = "You are provided with a conversation that consists of two parts: an \"LLM question\" and a \"human answer.\" Your task is to analyze the content of the human answer exclusively, and then generate a JSON object that reflects your evaluation based on two specific criteria:\n" +
                 "\n" +
                 "1. \"anxiety_score\": This is an integer value on a scale from 0 to 100, where 0 indicates that the answer shows no signs of anxiety, and 100 indicates an extremely high level of anxiety. Evaluate the language, tone, and any expressions of worry or nervousness to determine this score.\n" +
                 "\n" +
@@ -42,7 +42,7 @@ public class ChatGptController {
                 "- The values must be numbers only, and each must be within the range of 0 to 100.\n" +
                 "- Your entire output must be enclosed in a code block for easy copying.\n" +
                 "- The output must be valid JSON and nothing else.";
-        String prompt2 = "Objective:\n" +
+        String adviceAgentInstruction = "Objective:\n" +
                 "Your primary goal is to help an elderly individual open up about their emotional state by asking thoughtful, empathetic, and culturally sensitive questions. You are acting as a counselor, and your questions must mirror those a human counselor would ask to understand the patient’s emotional, social, and physical well-being.\n" +
                 "\n" +
                 "Important Requirements:\n" +
@@ -130,7 +130,7 @@ public class ChatGptController {
         if (userId.equals("null")) uuserId = 1L;
         else uuserId = Long.parseLong(userId);
 
-        return chatGptService.processAudioWithTwoPrompts(audioFile, prompt1, prompt2, uuserId)
+        return chatGptService.processAudioWithTwoPrompts(audioFile, scoreAgentInstruction, adviceAgentInstruction, uuserId)
                 .map(audioData -> ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_OCTET_STREAM)
                         .body(audioData));

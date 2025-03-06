@@ -35,4 +35,5 @@ public class DangerzoneController {
         List<Sentence> allSentences = dangerzoneService.getAllSentencesByUserId(userId);
         return ResponseEntity.ok(allSentences);
     }
+
 }
