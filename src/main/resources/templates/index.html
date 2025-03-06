@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홈페이지</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div class="webview-container">
+    <!-- 헤더 포함 -->
+    <header th:insert="~{header :: header}"></header>
+    <main>
+        <div class="body-container">
+            <div class="character-container"><img src="/images/test.png" alt="메인 캐릭터"></div>
+        </div>
+        <div class="bottom-container">
+            <div class="welcome-container" id="fadeText">안녕하세요</div>
+        </div>
+    </main>
+</div>
+
+<script>
+    document.getElementById("fadeText").addEventListener("animationend", function() {
+        window.location.href = "/main"; // ✅ 이동할 페이지 설정
+    });
+</script>
+</body>
+</html>

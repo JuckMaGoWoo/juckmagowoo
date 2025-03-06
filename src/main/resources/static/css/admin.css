@@ -1,0 +1,103 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f8f8f8;
+}
+
+/* 메인 컨테이너 */
+.admin-container {
+    width: 90%;
+    height: 90vh;
+    display: flex;
+    gap: 20px;
+}
+
+/* 왼쪽 사용자 입력 영역 */
+.user-input {
+    width: 25%;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+
+.user-input h2 {
+    margin-bottom: 15px;
+}
+
+.user-input input,
+.user-input select,
+.user-input button {
+    padding: 10px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+input#name,
+input#age,
+input#gender{
+    margin-bottom: 7px;
+}
+.user-input button {
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+/* 오른쪽 데이터 및 리스트 */
+.data-section {
+    width: 75%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* 그래프 영역 */
+.statistic-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+}
+
+.chart-container {
+    height: 40%;
+    padding-bottom: 20px;
+}
+
+.table-container {
+    text-align: center;
+}
+
+.table-container td,
+.table-container th {
+    padding: 3px;
+    border: 1px solid #ddd;
+}
+
+/* 사용자 목록 */
+.user-list {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 50%;
+    overflow-y: auto;
+}
+
+/* 카드 스타일 */
+.user-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+}
