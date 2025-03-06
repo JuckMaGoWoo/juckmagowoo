@@ -59,6 +59,12 @@ input#gender{
     gap: 20px;
 }
 
+.top-info {
+    margin: 0 10px;
+    font-size: large;
+    font-weight: bold;
+}
+
 /* 그래프 영역 */
 .statistic-container {
     background: white;
