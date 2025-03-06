@@ -54,7 +54,7 @@ public class ChatGptService {
         this.userService = userService;
     }
 
-    public Mono<byte[]> processAudioWithTwoPrompts(MultipartFile audioFile, String prompt1, String prompt2, long userId) {
+    public Mono<byte[]> processAudioWithTwoPrompts(MultipartFile audioFile, String scoreAgentInstruction, String adviceAgentInstruction, long userId) {
         return Mono.fromCallable(() -> sttService.transcribeAudio(audioFile))
                 .flatMap(question -> {
                     System.out.println("🎤 STT 변환된 질문: " + question);
@@ -71,8 +71,8 @@ public class ChatGptService {
 
                     String fullPrompt2 = history + "\n사용자: " + question + "\nAI:";  // 🟢 AI가 기억할 수 있도록 문맥 포함
 
-                    return getAnswer(fullPrompt2, prompt2)
-                            .flatMap(response2 -> {
+                    return getAnswer(fullPrompt2, adviceAgentInstruction, "gpt-4o-mini")
+                    .flatMap(response2 -> {
                                 System.out.println("💬 GPT 응답 2 (MP3 변환): " + response2);
 
                                 // 🔹 TTS 변환 및 MP3 생성
@@ -81,7 +81,7 @@ public class ChatGptService {
                                             return Mono.just(audioData);
                                         })
                                         .doFinally(signal -> {
-                                            getAnswer(question, prompt1)
+                                            getAnswer(question, scoreAgentInstruction, "o3-mini")
                                                     .flatMap(response1 -> {
                                                         System.out.println(" GPT 응답 1 (원본): " + response1);
 
@@ -117,9 +117,9 @@ public class ChatGptService {
 
 
 
-    private Mono<String> getAnswer(String question, String prompt) {
+    private Mono<String> getAnswer(String question, String prompt, String modelName) {
         Map<String, Object> requestBody = new HashMap<>();
-        requestBody.put("model", "gpt-3.5-turbo");
+        requestBody.put("model", modelName);
 
         List<Map<String, String>> messages = new ArrayList<>();
         messages.add(Map.of("role", "system", "content", prompt));
