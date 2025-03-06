@@ -1,0 +1,15 @@
+.danger-table-container {
+    width: 90%;
+    text-align: center;
+}
+
+.danger-table-container td,
+.danger-table-container th {
+    min-width: 50px;
+    padding: 3px;
+    border: 1px solid #ddd;
+}
+
+.danger-table {
+    width: 90%;
+}
