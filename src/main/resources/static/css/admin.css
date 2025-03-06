@@ -83,6 +83,16 @@ input#gender{
     border: 1px solid #ddd;
 }
 
+.table-container td:nth-child(10),
+.table-container th:nth-child(10) {
+    background-color: lightpink;
+}
+
+.table-container td:nth-child(11),
+.table-container th:nth-child(11) {
+    background-color: lightcoral;
+}
+
 /* 사용자 목록 */
 .user-list {
     background: white;

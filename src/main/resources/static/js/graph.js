@@ -93,6 +93,37 @@ function initChart(data) {
     const negativeScores = data.map(item => item.negative_score);
     const logicalScores = data.map(item => item.logical_score);
 
+    // Chart.js 커스텀 플러그인 정의
+    const backgroundHighlightPlugin = {
+        id: 'backgroundHighlight',
+        beforeDraw: (chart) => {
+            const {ctx, chartArea, scales} = chart;
+            const yScale = scales.y;
+            const threshold = 80; // 하이라이트할 임계값
+
+            if (!chartArea) {
+                return;
+            }
+
+            // 임계값의 Y 위치 계산
+            const thresholdY = yScale.getPixelForValue(threshold);
+
+            // 임계값 위쪽 영역 채우기
+            ctx.save();
+            ctx.fillStyle = 'rgba(255, 200, 200, 0.4)'; // 하이라이트 색상
+            ctx.fillRect(
+                chartArea.left,
+                chartArea.top,
+                chartArea.width,
+                thresholdY - chartArea.top
+            );
+            ctx.restore();
+        }
+    };
+
+    // 기존 차트 코드에 플러그인 등록
+    Chart.register(backgroundHighlightPlugin);
+
     // 차트 생성
     myChart = new Chart(ctx, {
         type: 'line',
@@ -187,7 +218,7 @@ function updateTable(negativeScores, logicalScores) {
 
     // 테이블 HTML 생성
     let tableHTML = `
-        <table class="distribution-table">
+        <table>
             <thead>
                 <tr>
                     <th>유형 / 범위</th>
