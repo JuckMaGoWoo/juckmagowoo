@@ -9,6 +9,7 @@ document.getElementById("addUser").addEventListener("click", async function () {
     const name = nameInput.value.trim();
     const age = ageInput.value;
     const gender = genderInput.value;
+    const history = " ";
 
     if (!name || age === "" || isNaN(Number(age)) || !gender) {
         alert("모든 필드를 입력해주세요.");
@@ -18,10 +19,12 @@ document.getElementById("addUser").addEventListener("click", async function () {
     const userData = {
         name,
         age: Number(age),
-        sex: gender === "male"
+        sex: gender === "male",
+        history
     };
 
     try {
+        console.log(userData);
         const response = await fetch('/api/v1/user', {
             method: 'POST',
             headers: {
