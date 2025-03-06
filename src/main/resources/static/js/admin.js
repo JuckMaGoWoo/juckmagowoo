@@ -90,7 +90,6 @@ async function loadUserCards(page) {
         alert("사용자 목록을 불러오는 중 오류가 발생했습니다.");
     }
 }
-
 function addUserCard(user) {
     const userCard = document.createElement("div");
     userCard.classList.add("user-card");
@@ -104,8 +103,18 @@ function addUserCard(user) {
         <p>성별: ${genderText}</p>
     `;
 
+    // ✅ 클릭 시 사용자 정보 저장 및 그래프 업데이트 트리거
+    userCard.addEventListener("click", function () {
+        const userData = JSON.stringify(user);
+        localStorage.setItem("selectedUser", userData);
+
+        // ✅ graph.js에 메시지 전달 (선택사항)
+        window.postMessage({ type: "USER_SELECTED", data: user }, "*");
+    });
+
     document.getElementById("userCards").appendChild(userCard);
 }
+
 
 
 // 페이지네이션 버튼 클릭 처리

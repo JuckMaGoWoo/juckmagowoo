@@ -1,4 +1,39 @@
 let myChart = null;
+
+document.addEventListener("DOMContentLoaded", function () {
+    // ✅ 페이지 로딩 시 기존 사용자 정보 불러오기
+    loadSelectedUser();
+
+    // ✅ storage 변경 감지 (다른 탭에서도 변경 가능)
+    window.addEventListener("storage", function (event) {
+        if (event.key === "selectedUser") {
+            loadSelectedUser();
+        }
+    });
+
+    // ✅ window.postMessage를 통한 데이터 수신 (선택사항)
+    window.addEventListener("message", function (event) {
+        if (event.data.type === "USER_SELECTED") {
+            updateGraph(event.data.data);
+        }
+    });
+});
+
+function loadSelectedUser() {
+    const storedUser = localStorage.getItem("selectedUser");
+    if (storedUser) {
+        const user = JSON.parse(storedUser);
+        updateGraph(user);
+    }
+}
+
+function updateGraph(user) {
+    console.log("그래프 업데이트: ", user);
+    // 여기에 그래프를 업데이트하는 코드 추가 (예: Chart.js 사용)
+}
+
+
+
 async function fetchDataFromDB() {
     try {
         /*
