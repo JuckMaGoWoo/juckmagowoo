@@ -87,7 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         // 🟪 "듣는 중" 상태 (보라색, 애니메이션 추가)
                         button.classList.remove("thinking");
                         button.classList.add("listening");
-                        buttonText.textContent = "듣는 중...";
+                        buttonText.textContent = "답변 중...";
                         isWaitingResponse = false;
                         isListening = true;
 
