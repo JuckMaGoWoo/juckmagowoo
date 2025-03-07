@@ -53,13 +53,15 @@ async function fetchDataFromDB(userId) {
 
 
 function userInfo(data) {
+    const url = `https://swan-lake.site/main?userId=${data['userId']}`;
     document.getElementById("detailName").innerHTML = `이름: ${data['name']}`;
     document.getElementById("detailAge").innerHTML = `나이: ${data['age']}`;
     document.getElementById("detailSex").innerHTML = `성별: ${data['sex'] ? '남자' : '여자'}`;
+    document.getElementById("url").innerHTML = url;
     const qrCode = new QRCodeStyling({
         width: 90,
         height: 90,
-        data: `https://swan-lake.site/?userId=${data['userId']}`,
+        data: url,
         dotsOptions: {
             color: "#000",
             type: "square"
