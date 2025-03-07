@@ -130,7 +130,7 @@ function initChart(data) {
             labels: labels,
             datasets: [
                 {
-                    label: 'Negative Score',
+                    label: '불안 지수',
                     data: negativeScores,
                     borderColor: 'rgba(255, 99, 132, 1)',
                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
@@ -140,7 +140,7 @@ function initChart(data) {
                     tension: 0.3
                 },
                 {
-                    label: 'Logical Score',
+                    label: '논리 지수',
                     data: logicalScores,
                     borderColor: 'rgba(54, 162, 235, 1)',
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
@@ -226,11 +226,11 @@ function updateTable(negativeScores, logicalScores) {
             </thead>
             <tbody>
                 <tr>
-                    <td><strong>Negative Score</strong></td>
+                    <td><strong>불안 지수</strong></td>
                     ${negativeCounts.map(count => `<td>${count}</td>`).join('')}
                 </tr>
                 <tr>
-                    <td><strong>Logical Score</strong></td>
+                    <td><strong>논리 지수</strong></td>
                     ${logicalCounts.map(count => `<td>${count}</td>`).join('')}
                 </tr>
             </tbody>
@@ -265,10 +265,10 @@ function updatePercentage (negativeScores, logicalScores) {
     // 비율에 따른 이모지를 HTML에 적용
     let percentHTML = `
     <div>
-        negative 비율 : ${negativePercent.toFixed(2)}% <img src="${getEmojiByPercentage(negativePercent)}" class="emotion-img" alt="감정이미지">
+        불안 비율 : ${negativePercent.toFixed(2)}% <img src="${getEmojiByPercentage(negativePercent)}" class="emotion-img" alt="감정이미지">
     </div>
     <div>
-        logical 비율 : ${logicalPercent.toFixed(2)}% <img src="${getEmojiByPercentage(logicalPercent)}" class="emotion-img" alt="감정이미지">
+        논리 비율 : ${logicalPercent.toFixed(2)}% <img src="${getEmojiByPercentage(logicalPercent)}" class="emotion-img" alt="감정이미지">
     </div>
 `;
 
